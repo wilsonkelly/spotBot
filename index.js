@@ -28,13 +28,29 @@ client.on("messageCreate", async (message) => {
 
   const guildId = message.guild.id;
   const content = message.content.toLowerCase();
-  const prefix = "spotted ";
+  const keywords = ["spotted", "spotting", "spot"];
+  // const keywordsVerbose = ["spotted", "spotting", "spot", 
+  // "spoted", "spoting", "spott" 
+  // "spottes", "spottinf", "apotted"];
   const db = getDatabaseForGuild(guildId);
 
   try {
     initializeDatabase(db);
 
-    if (content.startsWith(prefix)) {
+    let isSpotting = false;
+    for (let i = 0; i < keywords.length; i++) {
+      if (content.includes(keywords[i])) {
+        isSpotting = true;
+        break;
+      }
+    }
+
+    let mentionedUsers = message.mentions.users;
+
+    if (
+      (mentionedUsers.size() > 0) &&
+      (isSpotting)
+    ) {
       await handleSpottedCommand(message, db);
     } else if (content === "!leaderboard") {
       await handleLeaderboardCommand(message, db);
