@@ -25,6 +25,8 @@ async function handleSpottedCommand(message, db) {
       [spotterId, spotterNickname, spotterNickname],
     );
 
+    await message.add_reaction("🤖");
+
     await db.run(
       `INSERT INTO scores (user_id, username, spotter_count, spotted_count)
         VALUES (?, ?, 0, 1)
